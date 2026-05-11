@@ -41,9 +41,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         ]);
 
         $database = str_replace('`', '``', $input['db_name']);
-        $pdo->exec("CREATE DATABASE IF NOT EXISTS `{$database}` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci");
+        $pdo->exec("DROP DATABASE IF EXISTS `{$database}`");
+        $pdo->exec("CREATE DATABASE `{$database}` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci");
         $pdo->exec("USE `{$database}`");
-        dropSmartBusTables($pdo);
         runSqlFile($pdo, $schemaFile);
         runSqlFile($pdo, $seedFile);
         writeEnvFile($envFile, $input);
@@ -89,30 +89,6 @@ function runSqlFile(PDO $pdo, string $file): void
         }
         $pdo->exec($statement);
     }
-}
-
-function dropSmartBusTables(PDO $pdo): void
-{
-    $tables = [
-        'chat_messages',
-        'seat_reservations',
-        'active_trips',
-        'complaints',
-        'notifications',
-        'announcements',
-        'bookings',
-        'trips',
-        'tickets',
-        'buses',
-        'routes',
-        'users',
-    ];
-
-    $pdo->exec('SET FOREIGN_KEY_CHECKS = 0');
-    foreach ($tables as $table) {
-        $pdo->exec("DROP TABLE IF EXISTS `{$table}`");
-    }
-    $pdo->exec('SET FOREIGN_KEY_CHECKS = 1');
 }
 
 function writeEnvFile(string $file, array $input): void
