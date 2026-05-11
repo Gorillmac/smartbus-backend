@@ -86,8 +86,7 @@ final class Api
             Response::json(['error' => 'Invalid email or password'], 401);
         }
 
-        unset($user['password_hash']);
-        Response::json(['user' => $this->castRow($user)]);
+        Response::json(['user' => $this->dbToFrontend('users', $user)]);
     }
 
     private function index(string $resource): void
