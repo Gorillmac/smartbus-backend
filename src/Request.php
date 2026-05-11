@@ -1,0 +1,23 @@
+<?php
+
+declare(strict_types=1);
+
+namespace SmartBus;
+
+final class Request
+{
+    public static function json(): array
+    {
+        $raw = file_get_contents('php://input');
+        if ($raw === false || trim($raw) === '') {
+            return [];
+        }
+
+        $data = json_decode($raw, true);
+        if (!is_array($data)) {
+            Response::json(['error' => 'Invalid JSON body'], 422);
+        }
+
+        return $data;
+    }
+}
