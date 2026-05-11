@@ -1,0 +1,167 @@
+SMARTBUS DATABASE TERMINAL GUIDE
+================================
+
+This guide shows how to open the SmartBus MySQL database from the terminal
+and view the contents.
+
+
+1. START XAMPP
+--------------
+
+Open XAMPP Control Panel and start:
+
+- Apache
+- MySQL
+
+
+2. OPEN MYSQL FROM TERMINAL
+---------------------------
+
+Option A: Command Prompt
+
+Open CMD and run:
+
+cd C:\xampp\mysql\bin
+mysql -u root
+
+
+Option B: Git Bash
+
+Open Git Bash and run:
+
+cd /c/xampp/mysql/bin
+./mysql -u root
+
+
+If your MySQL has a password, use:
+
+mysql -u root -p
+
+Then type the password when asked.
+
+
+3. SELECT THE SMARTBUS DATABASE
+-------------------------------
+
+Inside MySQL, run:
+
+SHOW DATABASES;
+USE smartbus;
+SHOW TABLES;
+
+
+4. VIEW DEMO LOGIN USERS
+------------------------
+
+Run:
+
+SELECT id, name, email, role, bus_id FROM users;
+
+Expected demo accounts:
+
+Passenger: user@smartbus.com / password123
+Driver: driver@smartbus.com / driver123
+Admin: admin@smartbus.com / admin123
+
+Passwords are stored as hashes, so you will not see the plain passwords in
+the database.
+
+
+5. VIEW ROUTES
+--------------
+
+Run:
+
+SELECT id, name, number, status, fare FROM routes;
+
+
+6. VIEW BUSES
+-------------
+
+Run:
+
+SELECT id, number, plate, status, route_id, driver_id FROM buses;
+
+
+7. VIEW TICKETS
+---------------
+
+Run:
+
+SELECT id, user_id, route_id, status, issue_date, expiry_date, type FROM tickets;
+
+
+8. VIEW BOOKINGS
+----------------
+
+Run:
+
+SELECT id, user_id, route_id, booking_time, stop, seats, status, booking_date FROM bookings;
+
+
+9. VIEW TRIPS
+-------------
+
+Run:
+
+SELECT id, user_id, route_id, bus_id, trip_date, departure, arrival, status, rating FROM trips;
+
+
+10. VIEW COMPLAINTS
+-------------------
+
+Run:
+
+SELECT id, user_id, type, description, status, complaint_date FROM complaints;
+
+
+11. VIEW NOTIFICATIONS
+----------------------
+
+Run:
+
+SELECT id, user_id, type, message, notification_date, notification_time, is_read FROM notifications;
+
+
+12. EXIT MYSQL
+--------------
+
+Run:
+
+EXIT;
+
+
+13. QUICK USEFUL COMMANDS
+-------------------------
+
+Show current database:
+
+SELECT DATABASE();
+
+Count records in a table:
+
+SELECT COUNT(*) FROM users;
+SELECT COUNT(*) FROM routes;
+SELECT COUNT(*) FROM buses;
+
+Find one user:
+
+SELECT id, name, email, role FROM users WHERE email = 'admin@smartbus.com';
+
+View table structure:
+
+DESCRIBE users;
+DESCRIBE routes;
+DESCRIBE buses;
+
+
+14. IMPORTANT WARNING
+---------------------
+
+Be careful with commands like:
+
+DELETE FROM table_name;
+DROP TABLE table_name;
+DROP DATABASE smartbus;
+
+These commands remove data. Only use them if you are sure.
