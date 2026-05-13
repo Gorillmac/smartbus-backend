@@ -32,6 +32,12 @@ Backend URL: http://localhost/smartbus-backend/public
 Allowed Frontend Origin: *
 ```
 
+If XAMPP MySQL is running on another port, use that port instead. For example, if MySQL was changed to `3307`, setup must use:
+
+```text
+Port: 3307
+```
+
 8. Click `Run One-Time Setup`.
 9. Test the API:
 
@@ -40,6 +46,14 @@ http://localhost/smartbus-backend/public/api/health
 ```
 
 You should see a JSON response with `ok: true`.
+
+Also test the database connection:
+
+```text
+http://localhost/smartbus-backend/public/api/debug
+```
+
+The debug page should show the same database port that XAMPP is using, for example `"port": "3307"`, and the counts for `buses`, `routes`, and `users` should not be empty after demo data has been imported.
 
 If that URL gives a 404, Apache rewrite may be disabled. Use this fallback URL:
 

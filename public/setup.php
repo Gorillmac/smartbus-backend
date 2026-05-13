@@ -16,6 +16,7 @@ $defaults = [
     'app_url' => guessAppUrl(),
     'cors_origin' => '*',
 ];
+$defaults = array_merge($defaults, readExistingEnvDefaults($envFile));
 
 $message = null;
 $error = null;
@@ -65,6 +66,42 @@ function guessAppUrl(): string
     $host = $_SERVER['HTTP_HOST'] ?? 'localhost';
     $script = str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/'));
     return rtrim($https . '://' . $host . $script, '/');
+}
+
+function readExistingEnvDefaults(string $file): array
+{
+    if (!is_file($file)) {
+        return [];
+    }
+
+    $values = [];
+    foreach (file($file, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES) ?: [] as $line) {
+        $line = trim($line);
+        if ($line === '' || str_starts_with($line, '#') || !str_contains($line, '=')) {
+            continue;
+        }
+        [$name, $value] = explode('=', $line, 2);
+        $values[trim($name)] = trim($value);
+    }
+
+    $map = [
+        'db_host' => 'DB_HOST',
+        'db_port' => 'DB_PORT',
+        'db_name' => 'DB_DATABASE',
+        'db_user' => 'DB_USERNAME',
+        'db_pass' => 'DB_PASSWORD',
+        'app_url' => 'APP_URL',
+        'cors_origin' => 'CORS_ALLOWED_ORIGIN',
+    ];
+
+    $defaults = [];
+    foreach ($map as $field => $envName) {
+        if (array_key_exists($envName, $values)) {
+            $defaults[$field] = $values[$envName];
+        }
+    }
+
+    return $defaults;
 }
 
 function validateDatabaseName(string $name): void
@@ -127,6 +164,7 @@ function writeEnvFile(string $file, array $input): void
     main { max-width:760px; margin:0 auto; background:#fff; border:1px solid #d9e2ef; border-radius:8px; padding:28px; box-shadow:0 10px 30px rgba(20,32,50,.08); }
     h1 { margin:0 0 8px; font-size:28px; }
     p { line-height:1.5; }
+    .hint { margin:6px 0 0; font-size:13px; color:#536273; }
     label { display:block; font-weight:700; margin:16px 0 6px; }
     input { width:100%; box-sizing:border-box; padding:12px; border:1px solid #c8d3e1; border-radius:6px; font-size:15px; }
     button { margin-top:22px; padding:12px 18px; border:0; border-radius:6px; background:#0b63ce; color:#fff; font-weight:700; cursor:pointer; }
@@ -154,6 +192,7 @@ function writeEnvFile(string $file, array $input): void
       <div>
         <label for="db_port">Port</label>
         <input id="db_port" name="db_port" value="<?= htmlspecialchars($input['db_port']) ?>" required>
+        <p class="hint">Use <code>3307</code> here if XAMPP MySQL was changed from the default <code>3306</code>.</p>
       </div>
     </div>
 
