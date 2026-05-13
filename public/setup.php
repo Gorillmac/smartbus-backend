@@ -19,8 +19,10 @@ $defaults = [
 
 $message = null;
 $error = null;
+$elapsed = null;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $startedAt = microtime(true);
     $input = array_merge($defaults, [
         'db_host' => trim((string)($_POST['db_host'] ?? $defaults['db_host'])),
         'db_port' => trim((string)($_POST['db_port'] ?? $defaults['db_port'])),
@@ -48,6 +50,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         runSqlFile($pdo, $seedFile);
         writeEnvFile($envFile, $input);
 
+        $elapsed = round(microtime(true) - $startedAt, 2);
         $message = 'Setup complete. The database was created, demo data was imported, and .env was saved.';
     } catch (Throwable $e) {
         $error = $e->getMessage();
@@ -139,7 +142,7 @@ function writeEnvFile(string $file, array $input): void
   <h1>SmartBus Backend Setup</h1>
   <p>Use this once after copying the backend into XAMPP <code>htdocs</code>. It creates the MySQL database, imports tables, imports demo records, and saves the connection settings.</p>
 
-  <?php if ($message): ?><p class="ok"><?= htmlspecialchars($message) ?></p><?php endif; ?>
+  <?php if ($message): ?><p class="ok"><?= htmlspecialchars($message) ?><?php if ($elapsed !== null): ?> Time: <?= htmlspecialchars((string)$elapsed) ?> seconds.<?php endif; ?></p><?php endif; ?>
   <?php if ($error): ?><p class="err"><?= htmlspecialchars($error) ?></p><?php endif; ?>
 
   <form method="post">
@@ -171,6 +174,11 @@ function writeEnvFile(string $file, array $input): void
 
     <button type="submit">Run One-Time Setup</button>
   </form>
+
+  <p style="margin-top:18px;font-size:14px;color:#536273;">
+    If setup is already done and only demo logins are not working, open
+    <code>repair-demo-logins.php</code> instead of running setup again.
+  </p>
 </main>
 </body>
 </html>

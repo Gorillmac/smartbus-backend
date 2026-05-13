@@ -1,18 +1,3 @@
-SET FOREIGN_KEY_CHECKS = 0;
-TRUNCATE TABLE chat_messages;
-TRUNCATE TABLE seat_reservations;
-TRUNCATE TABLE complaints;
-TRUNCATE TABLE active_trips;
-TRUNCATE TABLE notifications;
-TRUNCATE TABLE announcements;
-TRUNCATE TABLE bookings;
-TRUNCATE TABLE trips;
-TRUNCATE TABLE tickets;
-TRUNCATE TABLE buses;
-TRUNCATE TABLE routes;
-TRUNCATE TABLE users;
-SET FOREIGN_KEY_CHECKS = 1;
-
 INSERT INTO users (id, name, email, password_hash, role, phone, join_date, license_number, bus_id) VALUES
 (1, 'John Passenger', 'user@smartbus.com', 'ef92b778bafe771e89245b89ecbc08a44a4e166c06659911881f383d4473e94f', 'passenger', '082 111 2222', '2025-03-01', NULL, NULL),
 (2, 'Sarah User', 'sarah@smartbus.com', 'ef92b778bafe771e89245b89ecbc08a44a4e166c06659911881f383d4473e94f', 'passenger', '082 333 4444', '2025-04-15', NULL, NULL),
