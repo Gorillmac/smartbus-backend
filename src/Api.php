@@ -43,6 +43,10 @@ final class Api
             Response::json(['ok' => true, 'service' => 'smartbus-backend']);
         }
 
+        if ($method === 'GET' && $resource === 'debug') {
+            $this->debug();
+        }
+
         if ($method === 'POST' && $resource === 'login') {
             $this->login();
         }
@@ -87,6 +91,31 @@ final class Api
         }
 
         Response::json(['user' => $this->dbToFrontend('users', $user)]);
+    }
+
+    private function debug(): void
+    {
+        $counts = [];
+        foreach (['users', 'routes', 'buses', 'tickets', 'trips', 'bookings'] as $table) {
+            $counts[$table] = (int)$this->db->query("SELECT COUNT(*) FROM {$table}")->fetchColumn();
+        }
+
+        $routes = $this->db->query('SELECT id, number, name, status FROM routes ORDER BY id DESC LIMIT 5')->fetchAll();
+        $buses = $this->db->query('SELECT id, number, plate, status, route_id, driver_id FROM buses ORDER BY id DESC LIMIT 5')->fetchAll();
+        $users = $this->db->query('SELECT id, name, email, role, bus_id FROM users ORDER BY id DESC LIMIT 5')->fetchAll();
+
+        Response::json([
+            'ok' => true,
+            'database' => env('DB_DATABASE', 'smartbus'),
+            'host' => env('DB_HOST', '127.0.0.1'),
+            'port' => env('DB_PORT', '3306'),
+            'counts' => $counts,
+            'latest' => [
+                'routes' => $routes,
+                'buses' => $buses,
+                'users' => $users,
+            ],
+        ]);
     }
 
     private function index(string $resource): void
