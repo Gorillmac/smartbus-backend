@@ -41,6 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $pdo = new PDO($dsn, $input['db_user'], $input['db_pass'], [
             PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
             PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+            PDO::ATTR_TIMEOUT => 5,
         ]);
 
         $database = str_replace('`', '``', $input['db_name']);
@@ -86,7 +87,6 @@ function readExistingEnvDefaults(string $file): array
 
     $map = [
         'db_host' => 'DB_HOST',
-        'db_port' => 'DB_PORT',
         'db_name' => 'DB_DATABASE',
         'db_user' => 'DB_USERNAME',
         'db_pass' => 'DB_PASSWORD',
@@ -192,7 +192,7 @@ function writeEnvFile(string $file, array $input): void
       <div>
         <label for="db_port">Port</label>
         <input id="db_port" name="db_port" value="<?= htmlspecialchars($input['db_port']) ?>" required>
-        <p class="hint">Use <code>3307</code> here if XAMPP MySQL was changed from the default <code>3306</code>.</p>
+        <p class="hint">Use <code>3306</code> for the normal XAMPP MySQL setup.</p>
       </div>
     </div>
 

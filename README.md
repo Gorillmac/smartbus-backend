@@ -32,11 +32,7 @@ Backend URL: http://localhost/smartbus-backend/public
 Allowed Frontend Origin: *
 ```
 
-If XAMPP MySQL is running on another port, use that port instead. For example, if MySQL was changed to `3307`, setup must use:
-
-```text
-Port: 3307
-```
+For this student setup, keep XAMPP MySQL on port `3306`.
 
 8. Click `Run One-Time Setup`.
 9. Test the API:
@@ -53,7 +49,53 @@ Also test the database connection:
 http://localhost/smartbus-backend/public/api/debug
 ```
 
-The debug page should show the same database port that XAMPP is using, for example `"port": "3307"`, and the counts for `buses`, `routes`, and `users` should not be empty after demo data has been imported.
+The debug page should show `"port": "3306"`, and the counts for `buses`, `routes`, and `users` should not be empty after demo data has been imported.
+
+## If XAMPP MySQL Starts Then Switches Off
+
+This is usually a local XAMPP MySQL problem, not a SmartBus code problem. The API cannot read the database while MySQL is stopped.
+
+1. Close the XAMPP Control Panel.
+2. Open Task Manager and end any `mysqld.exe` process.
+3. Go to:
+
+```text
+C:\xampp\mysql
+```
+
+4. Rename the old data folder:
+
+```text
+data
+```
+
+to:
+
+```text
+data_old
+```
+
+5. Copy this folder:
+
+```text
+backup
+```
+
+and rename the copy to:
+
+```text
+data
+```
+
+6. Start XAMPP again.
+7. Start `MySQL` and confirm it stays running on port `3306`.
+8. Open setup again:
+
+```text
+http://localhost/smartbus-backend/public/setup.php
+```
+
+9. Use port `3306`, then click `Run One-Time Setup`.
 
 If that URL gives a 404, Apache rewrite may be disabled. Use this fallback URL:
 
