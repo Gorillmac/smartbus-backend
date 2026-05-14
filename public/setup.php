@@ -33,6 +33,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'app_url' => rtrim(trim((string)($_POST['app_url'] ?? $defaults['app_url'])), '/'),
         'cors_origin' => trim((string)($_POST['cors_origin'] ?? $defaults['cors_origin'])),
     ]);
+    if ($input['db_host'] === '0.0.0.0') {
+        $input['db_host'] = '127.0.0.1';
+    }
 
     try {
         validateDatabaseName($input['db_name']);
@@ -188,6 +191,7 @@ function writeEnvFile(string $file, array $input): void
       <div>
         <label for="db_host">MySQL Host</label>
         <input id="db_host" name="db_host" value="<?= htmlspecialchars($input['db_host']) ?>" required>
+        <p class="hint">Use <code>127.0.0.1</code>. Do not use <code>0.0.0.0</code> here.</p>
       </div>
       <div>
         <label for="db_port">Port</label>

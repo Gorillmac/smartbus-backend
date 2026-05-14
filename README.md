@@ -34,6 +34,10 @@ Allowed Frontend Origin: *
 
 For this student setup, keep XAMPP MySQL on port `3306`.
 
+Use `127.0.0.1` as the MySQL host in SmartBus setup. Do not enter `0.0.0.0` as the MySQL host. If MySQL shows that it is listening on `0.0.0.0:3306`, that only means MySQL is accepting connections on the computer's network interfaces; the SmartBus PHP backend should still connect to it using `127.0.0.1`.
+
+Another PC should not connect directly to MySQL. The other PC or hosted frontend connects to the PHP backend URL, and the PHP backend connects to MySQL locally.
+
 8. Click `Run One-Time Setup`.
 9. Test the API:
 

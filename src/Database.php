@@ -17,6 +17,9 @@ final class Database
         }
 
         $host = env('DB_HOST', '127.0.0.1');
+        if ($host === '0.0.0.0') {
+            $host = '127.0.0.1';
+        }
         $port = env('DB_PORT', '3306');
         $database = env('DB_DATABASE', 'smartbus');
         $username = env('DB_USERNAME', 'root');
