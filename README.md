@@ -107,7 +107,7 @@ If that URL gives a 404, Apache rewrite may be disabled. Use this fallback URL:
 http://localhost/smartbus-backend/public/index.php/api/health
 ```
 
-Then update the frontend `src/config.js` to use:
+Then update the frontend `public/config.js` to use:
 
 ```js
 window.SMARTBUS_API_BASE = "http://localhost/smartbus-backend/public/index.php/api";
@@ -126,7 +126,7 @@ Admin: admin@smartbus.com / admin123
 The frontend reads the backend URL from:
 
 ```text
-artifacts/smartbus/src/config.js
+artifacts/smartbus/public/config.js
 ```
 
 For XAMPP on the same PC:
@@ -148,6 +148,22 @@ window.SMARTBUS_API_BASE = "https://your-backend-domain.com/api";
 ```
 
 Important: a hosted frontend cannot call `localhost` on your PC. The backend must be reachable through a public domain, public IP with port forwarding, or a tunnel such as Cloudflare Tunnel or Ngrok.
+
+## Ngrok Backend
+
+If Apache is serving XAMPP on port `80`, run ngrok like this on the backend PC:
+
+```bash
+ngrok http 80
+```
+
+Use the HTTPS ngrok URL in the frontend:
+
+```text
+https://your-frontend-site.com/?api=https://abc123.ngrok-free.app/smartbus-backend/public/api
+```
+
+Replace `abc123.ngrok-free.app` with the real ngrok domain. The frontend sends the `ngrok-skip-browser-warning` header automatically so API requests receive JSON data instead of ngrok's browser warning page.
 
 ## Manual PHP Server Option
 

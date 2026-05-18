@@ -39,7 +39,7 @@ function env(string $key, ?string $default = null): ?string
 
 $origin = env('CORS_ALLOWED_ORIGIN', '*');
 header('Access-Control-Allow-Origin: ' . $origin);
-header('Access-Control-Allow-Headers: Content-Type, Authorization');
+header('Access-Control-Allow-Headers: Content-Type, Authorization, ngrok-skip-browser-warning');
 header('Access-Control-Allow-Methods: GET, POST, PATCH, DELETE, OPTIONS');
 header('Content-Type: application/json; charset=utf-8');
 header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
